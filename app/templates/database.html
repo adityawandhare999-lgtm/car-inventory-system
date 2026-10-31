@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>PostgreSQL Database Explorer</h1>
+<div class="sub">Browse raw tables and records stored in PostgreSQL</div>
+
+<div class="card" style="margin-bottom: 20px;">
+  <div class="toolbar" style="margin-bottom: 0;">
+    <form method="GET" action="/database" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; width:100%;">
+      <label style="font-weight:600; font-size:14px;">Select Table:</label>
+      <select name="table" onchange="this.form.submit()">
+        {% for t in tables %}
+          <option value="{{ t }}" {% if t == current_table %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+      <noscript><button class="btn" type="submit">View</button></noscript>
+      <span class="count">{{ rows|length }} records found</span>
+    </form>
+  </div>
+</div>
+
+<div class="card" style="overflow-x:auto;">
+  <h3>Table: <span style="color:var(--accent);">{{ current_table }}</span></h3>
+  {% if rows %}
+    <table>
+      <thead>
+        <tr>
+          {% for col in columns %}
+            <th>{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            {% for col in columns %}
+              <td>{{ row[col] if row[col] is not none else 'NULL' }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p style="color:var(--muted); padding: 15px 0;">This table is currently empty.</p>
+  {% endif %}
+</div>
+{% endblock %}

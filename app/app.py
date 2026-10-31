@@ -172,6 +172,25 @@ def service():
                     ORDER BY sr.service_date DESC, sr.service_id DESC""")
     return render_template("service.html", rows=rows, page="service")
 
+@app.route("/database")
+def database_explorer():
+    allowed_tables = [
+        "cars", "car_models", "manufacturers", "suppliers",
+        "employees", "customers", "sales", "service_records", "v_available_inventory"
+    ]
+    current_table = request.args.get("table", "cars")
+    if current_table not in allowed_tables:
+        current_table = "cars"
+    try:
+        rows = query(f"SELECT * FROM {current_table} LIMIT 100")
+        columns = list(rows[0].keys()) if rows else []
+    except Exception as e:
+        flash(f"Error loading table: {e}", "err")
+        rows = []
+        columns = []
+    return render_template("database.html", tables=allowed_tables, current_table=current_table,
+                           rows=rows, columns=columns, page="database")
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=os.environ.get("FLASK_DEBUG", "True").lower() in ("true", "1"))
