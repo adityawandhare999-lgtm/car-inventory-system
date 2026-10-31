@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block content %}
+<h1>Car Inventory</h1><div class="sub">Search, filter and manage every car in stock</div>
+<form class="toolbar" method="get">
+  <input name="q" value="{{ q }}" placeholder="Search make, model or colour" style="width:260px">
+  <select name="status"><option value="">All statuses</option>
+    {% for s in ['Available','Reserved','Sold','In Service'] %}<option {{ 'selected' if s==status }}>{{ s }}</option>{% endfor %}</select>
+  <select name="fuel"><option value="">All fuel types</option>
+    {% for s in ['Petrol','Diesel','CNG','Electric'] %}<option {{ 'selected' if s==fuel }}>{{ s }}</option>{% endfor %}</select>
+  <button class="btn">Filter</button><a class="btn sec" href="/inventory">Reset</a>
+  <span class="count">{{ cars|length }} cars found</span>
+</form>
+<div class="card" style="padding:6px 8px">
+<table><tr><th>ID</th><th>Car</th><th>Fuel</th><th>Trans.</th><th>Colour</th><th>Year</th><th class="num">Km driven</th><th>Cond.</th><th class="num">Selling price</th><th>Status</th><th></th></tr>
+{% for c in cars %}<tr><td>{{ c.car_id }}</td><td><b>{{ c.manufacturer }}</b> {{ c.model_name }}</td><td>{{ c.fuel_type }}</td><td>{{ c.transmission }}</td><td>{{ c.color }}</td><td>{{ c.manufacture_year }}</td><td class="num">{{ "{:,}".format(c.mileage_km) }}</td><td>{{ c.car_condition }}</td><td class="num">{{ c.selling_price|inr }}</td>
+<td><span class="badge b-{{ c.status.replace(' ','-') }}">{{ c.status }}</span></td>
+<td>{% if c.status=='Available' %}<form method="post" action="/cars/{{ c.car_id }}/delete" onsubmit="return confirm('Remove this car?')"><button class="btn sm">Remove</button></form>{% endif %}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

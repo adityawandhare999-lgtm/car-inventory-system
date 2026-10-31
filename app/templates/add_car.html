@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<h1>Add New Car</h1><div class="sub">Register a new vehicle in the inventory (new cars are created with status "Available")</div>
+<form method="post" class="card"><div class="form-grid">
+  <div><label>Car model</label><select name="model_id" required>{% for m in models %}<option value="{{ m.model_id }}">{{ m.label }}</option>{% endfor %}</select></div>
+  <div><label>Supplier</label><select name="supplier_id" required>{% for s in suppliers %}<option value="{{ s.supplier_id }}">{{ s.label }}</option>{% endfor %}</select></div>
+  <div><label>VIN (17 characters)</label><input name="vin" minlength="17" maxlength="17" required placeholder="MA3EWB52S00123456"></div>
+  <div><label>Colour</label><input name="color" required placeholder="White"></div>
+  <div><label>Manufacture year</label><input type="number" name="year" min="2000" max="2026" value="2026" required></div>
+  <div><label>Kilometres driven</label><input type="number" name="mileage" min="0" value="0" required></div>
+  <div><label>Condition</label><select name="condition"><option>New</option><option>Used</option></select></div>
+  <div><label>Purchase price (&#8377;)</label><input type="number" name="purchase_price" min="1" required placeholder="900000"></div>
+  <div><label>Selling price (&#8377;)</label><input type="number" name="selling_price" min="1" required placeholder="985000"></div>
+  <div><label>Arrival date</label><input type="date" name="arrival_date" value="2026-10-18" required></div>
+</div><div style="margin-top:22px"><button class="btn">Save car</button> <a class="btn sec" href="/inventory">Cancel</a></div></form>
+{% endblock %}

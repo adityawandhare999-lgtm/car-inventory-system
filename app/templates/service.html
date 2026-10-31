@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<h1>Service Records</h1><div class="sub">Maintenance and pre-delivery work done on inventory cars</div>
+<div class="card" style="padding:6px 8px"><table><tr><th>ID</th><th>Date</th><th>Car</th><th>Service</th><th>Advisor</th><th class="num">Cost</th><th>Status</th></tr>
+{% for r in rows %}<tr><td>{{ r.service_id }}</td><td>{{ r.service_date }}</td><td>{{ r.car }}</td><td>{{ r.service_type }}</td><td>{{ r.advisor }}</td><td class="num">{{ r.cost|inr }}</td><td><span class="badge b-{{ r.service_status.replace(' ','-') }}">{{ r.service_status }}</span></td></tr>{% endfor %}</table></div>
+{% endblock %}

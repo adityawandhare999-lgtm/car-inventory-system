@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<h1>Customers</h1><div class="sub">{{ rows|length }} registered customers</div>
+<div class="card" style="padding:6px 8px"><table><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>City</th><th>Registered</th><th class="num">Purchases</th></tr>
+{% for r in rows %}<tr><td>{{ r.customer_id }}</td><td><b>{{ r.full_name }}</b></td><td>{{ r.phone }}</td><td>{{ r.email }}</td><td>{{ r.city }}</td><td>{{ r.registered_on }}</td><td class="num">{{ r.purchases }}</td></tr>{% endfor %}</table></div>
+{% endblock %}

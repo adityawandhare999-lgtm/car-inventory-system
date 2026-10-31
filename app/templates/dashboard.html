@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block content %}
+<h1>Dashboard</h1><div class="sub">Live overview of the showroom inventory and sales</div>
+<div class="cards">
+  <div class="card stat"><div class="lbl">Total Cars</div><div class="val">{{ stats.total }}</div></div>
+  <div class="card stat"><div class="lbl">Available</div><div class="val" style="color:var(--ok)">{{ stats.available }} <small>for sale</small></div></div>
+  <div class="card stat"><div class="lbl">Stock Value</div><div class="val">{{ stats.stock_value|inr }}</div></div>
+  <div class="card stat"><div class="lbl">Total Revenue</div><div class="val">{{ revenue|inr }}</div></div>
+</div>
+<div class="cards">
+  <div class="card stat"><div class="lbl">Sold</div><div class="val" style="color:var(--info)">{{ stats.sold }}</div></div>
+  <div class="card stat"><div class="lbl">Reserved</div><div class="val" style="color:var(--warn)">{{ stats.reserved }}</div></div>
+  <div class="card stat"><div class="lbl">In Service</div><div class="val" style="color:var(--bad)">{{ stats.in_service }}</div></div>
+  <div class="card stat"><div class="lbl">Customers Served</div><div class="val">{{ stats.sold }}</div></div>
+</div>
+<div class="grid2">
+  <div class="card"><h3>Recent Sales</h3>
+    <table><tr><th>Date</th><th>Customer</th><th>Car</th><th class="num">Price</th><th>Payment</th></tr>
+    {% for r in recent %}<tr><td>{{ r.sale_date }}</td><td>{{ r.customer }}</td><td>{{ r.car }}</td><td class="num">{{ r.sale_price|inr }}</td><td>{{ r.payment_mode }}</td></tr>{% endfor %}
+    </table></div>
+  <div class="card"><h3>Unsold Stock by Fuel Type</h3>
+    {% set mx = by_fuel[0].n if by_fuel else 1 %}
+    {% for f in by_fuel %}<div class="bar-row"><span class="name">{{ f.fuel_type }}</span><div class="bar"><i style="width:{{ (f.n/mx*100)|round }}%"></i></div><b>{{ f.n }}</b></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

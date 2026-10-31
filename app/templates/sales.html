@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block content %}
+<h1>Sales</h1><div class="sub">Record a sale &mdash; a database trigger marks the car as Sold automatically</div>
+<form method="post" class="card" style="margin-bottom:18px"><h3>New sale</h3><div class="form-grid">
+  <div><label>Car</label><select name="car_id">{% for c in cars %}<option value="{{ c.car_id }}">#{{ c.car_id }} {{ c.label }} ({{ c.selling_price|inr }})</option>{% endfor %}</select></div>
+  <div><label>Customer</label><select name="customer_id">{% for c in customers %}<option value="{{ c.customer_id }}">{{ c.full_name }}</option>{% endfor %}</select></div>
+  <div><label>Salesperson</label><select name="employee_id">{% for e in emps %}<option value="{{ e.employee_id }}">{{ e.full_name }}</option>{% endfor %}</select></div>
+  <div><label>Sale date</label><input type="date" name="sale_date" value="2026-10-18"></div>
+  <div><label>Sale price (&#8377;)</label><input type="number" name="sale_price" required></div>
+  <div><label>Payment mode</label><select name="payment_mode"><option>Cash</option><option>Loan</option><option>UPI</option><option>Cheque</option><option>Bank Transfer</option></select></div>
+</div><div style="margin-top:18px"><button class="btn">Record sale</button></div></form>
+<div class="card" style="padding:6px 8px"><table><tr><th>Sale</th><th>Date</th><th>Customer</th><th>City</th><th>Car</th><th>Salesperson</th><th class="num">Price</th><th>Payment</th></tr>
+{% for r in rows %}<tr><td>#{{ r.sale_id }}</td><td>{{ r.sale_date }}</td><td>{{ r.customer }}</td><td>{{ r.city }}</td><td>{{ r.car }}</td><td>{{ r.salesperson }}</td><td class="num">{{ r.sale_price|inr }}</td><td>{{ r.payment_mode }}</td></tr>{% endfor %}</table></div>
+{% endblock %}
