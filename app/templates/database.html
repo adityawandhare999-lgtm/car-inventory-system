@@ -1,46 +1,66 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>PostgreSQL Database Explorer</h1>
-<div class="sub">Browse raw tables and records stored in PostgreSQL</div>
-
-<div class="card" style="margin-bottom: 20px;">
-  <div class="toolbar" style="margin-bottom: 0;">
-    <form method="GET" action="/database" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; width:100%;">
-      <label style="font-weight:600; font-size:14px;">Select Table:</label>
-      <select name="table" onchange="this.form.submit()">
-        {% for t in tables %}
-          <option value="{{ t }}" {% if t == current_table %}selected{% endif %}>{{ t }}</option>
-        {% endfor %}
-      </select>
-      <noscript><button class="btn" type="submit">View</button></noscript>
-      <span class="count">{{ rows|length }} records found</span>
-    </form>
+<div class="page-header">
+  <div>
+    <h1>PostgreSQL Database Explorer</h1>
+    <div class="sub">Inspect raw relations, schemas, and live database rows stored on Render PostgreSQL</div>
   </div>
 </div>
 
-<div class="card" style="overflow-x:auto;">
-  <h3>Table: <span style="color:var(--accent);">{{ current_table }}</span></h3>
-  {% if rows %}
-    <table>
-      <thead>
-        <tr>
-          {% for col in columns %}
-            <th>{{ col }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in rows %}
+<div class="card" style="margin-bottom: 20px;">
+  <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px;">
+    Quick Table Switcher:
+  </div>
+  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    {% for t in tables %}
+      <a href="/database?table={{ t }}" 
+         style="text-decoration:none; padding: 7px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid {% if t == current_table %}#2563eb; background:#eff6ff; color:#1d4ed8{% else %}#e2e8f0; background:#f8fafc; color:#475569{% endif %}; transition: all 0.15s ease;">
+        {{ t }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="padding: 12px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 16px; border-bottom: 1px solid var(--card-border);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 18px;">&#128193;</span>
+      <h3 style="margin: 0; font-size: 16px;">Relation: <span style="color:var(--primary); font-family:monospace; font-size: 17px;">public.{{ current_table }}</span></h3>
+    </div>
+    <span class="count">{{ rows|length }} records returned</span>
+  </div>
+
+  <div class="table-responsive" style="margin-top: 10px;">
+    {% if rows %}
+      <table>
+        <thead>
           <tr>
             {% for col in columns %}
-              <td>{{ row[col] if row[col] is not none else 'NULL' }}</td>
+              <th style="font-family:monospace; font-size:12px;">{{ col }}</th>
             {% endfor %}
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% else %}
-    <p style="color:var(--muted); padding: 15px 0;">This table is currently empty.</p>
-  {% endif %}
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              {% for col in columns %}
+                <td style="font-size: 13px; {% if col.endswith('_id') or col == 'vin' %}font-family:monospace; color:var(--text-muted);{% endif %}">
+                  {% if row[col] is none %}
+                    <span style="color:#cbd5e1; font-style:italic;">NULL</span>
+                  {% else %}
+                    {{ row[col] }}
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div style="text-align:center; padding: 40px 20px; color:var(--text-muted);">
+        <p style="font-size: 15px; font-weight: 500;">No records found in table <code>{{ current_table }}</code></p>
+      </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

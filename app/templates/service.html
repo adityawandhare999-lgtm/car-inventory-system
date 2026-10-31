@@ -1,5 +1,41 @@
-{% extends "base.html" %}{% block content %}
-<h1>Service Records</h1><div class="sub">Maintenance and pre-delivery work done on inventory cars</div>
-<div class="card" style="padding:6px 8px"><table><tr><th>ID</th><th>Date</th><th>Car</th><th>Service</th><th>Advisor</th><th class="num">Cost</th><th>Status</th></tr>
-{% for r in rows %}<tr><td>{{ r.service_id }}</td><td>{{ r.service_date }}</td><td>{{ r.car }}</td><td>{{ r.service_type }}</td><td>{{ r.advisor }}</td><td class="num">{{ r.cost|inr }}</td><td><span class="badge b-{{ r.service_status.replace(' ','-') }}">{{ r.service_status }}</span></td></tr>{% endfor %}</table></div>
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Service & Maintenance Records</h1>
+    <div class="sub">Pre-delivery inspections, periodic maintenance, and repairs performed on vehicles</div>
+  </div>
+  <span class="count">{{ rows|length }} work orders</span>
+</div>
+
+<div class="card" style="padding: 10px;">
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Service Date</th>
+          <th>Vehicle</th>
+          <th>Work Performed</th>
+          <th>Service Advisor</th>
+          <th class="num">Billing Cost</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td><span style="color:var(--text-muted); font-size:12px;">#{{ r.service_id }}</span></td>
+          <td>{{ r.service_date }}</td>
+          <td><strong>{{ r.car }}</strong></td>
+          <td>{{ r.service_type }}</td>
+          <td>{{ r.advisor }}</td>
+          <td class="num" style="font-weight:700;">{{ r.cost|inr }}</td>
+          <td><span class="badge b-{{ r.service_status.replace(' ','-') }}">{{ r.service_status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

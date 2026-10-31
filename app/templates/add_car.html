@@ -1,15 +1,83 @@
-{% extends "base.html" %}{% block content %}
-<h1>Add New Car</h1><div class="sub">Register a new vehicle in the inventory (new cars are created with status "Available")</div>
-<form method="post" class="card"><div class="form-grid">
-  <div><label>Car model</label><select name="model_id" required>{% for m in models %}<option value="{{ m.model_id }}">{{ m.label }}</option>{% endfor %}</select></div>
-  <div><label>Supplier</label><select name="supplier_id" required>{% for s in suppliers %}<option value="{{ s.supplier_id }}">{{ s.label }}</option>{% endfor %}</select></div>
-  <div><label>VIN (17 characters)</label><input name="vin" minlength="17" maxlength="17" required placeholder="MA3EWB52S00123456"></div>
-  <div><label>Colour</label><input name="color" required placeholder="White"></div>
-  <div><label>Manufacture year</label><input type="number" name="year" min="2000" max="2026" value="2026" required></div>
-  <div><label>Kilometres driven</label><input type="number" name="mileage" min="0" value="0" required></div>
-  <div><label>Condition</label><select name="condition"><option>New</option><option>Used</option></select></div>
-  <div><label>Purchase price (&#8377;)</label><input type="number" name="purchase_price" min="1" required placeholder="900000"></div>
-  <div><label>Selling price (&#8377;)</label><input type="number" name="selling_price" min="1" required placeholder="985000"></div>
-  <div><label>Arrival date</label><input type="date" name="arrival_date" value="2026-10-18" required></div>
-</div><div style="margin-top:22px"><button class="btn">Save car</button> <a class="btn sec" href="/inventory">Cancel</a></div></form>
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Add New Vehicle</h1>
+    <div class="sub">Register a newly arrived car into the active showroom inventory</div>
+  </div>
+  <a class="btn sec" href="/inventory">&larr; Back to Inventory</a>
+</div>
+
+<form method="post" class="card" style="max-width: 900px;">
+  <h3>Vehicle Specifications</h3>
+  <div class="form-grid">
+    <div>
+      <label>Car Model & Variant</label>
+      <select name="model_id" required>
+        <option value="" disabled selected>Select model variant...</option>
+        {% for m in models %}
+          <option value="{{ m.model_id }}">{{ m.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Supplier / Dealership Partner</label>
+      <select name="supplier_id" required>
+        <option value="" disabled selected>Select supplier source...</option>
+        {% for s in suppliers %}
+          <option value="{{ s.supplier_id }}">{{ s.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>VIN (17 Characters)</label>
+      <input name="vin" minlength="17" maxlength="17" required placeholder="e.g. MA3EWB52S00123456" style="text-transform:uppercase; font-family:monospace;">
+    </div>
+
+    <div>
+      <label>Exterior Colour</label>
+      <input name="color" required placeholder="e.g. Arctic White, Midnight Blue">
+    </div>
+
+    <div>
+      <label>Manufacture Year</label>
+      <input type="number" name="year" min="2000" max="2026" value="2026" required>
+    </div>
+
+    <div>
+      <label>Odometer Reading (KM)</label>
+      <input type="number" name="mileage" min="0" value="0" required>
+    </div>
+
+    <div>
+      <label>Vehicle Condition</label>
+      <select name="condition">
+        <option value="New">Brand New</option>
+        <option value="Used">Pre-Owned / Certified Used</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Purchase / Procurement Price (&#8377;)</label>
+      <input type="number" name="purchase_price" min="1" required placeholder="e.g. 750000">
+    </div>
+
+    <div>
+      <label>Showroom Selling Price (&#8377;)</label>
+      <input type="number" name="selling_price" min="1" required placeholder="e.g. 840000">
+    </div>
+
+    <div>
+      <label>Stock Arrival Date</label>
+      <input type="date" name="arrival_date" value="2026-10-31" required>
+    </div>
+  </div>
+
+  <div style="margin-top: 28px; display: flex; gap: 12px; border-top: 1px solid var(--card-border); padding-top: 20px;">
+    <button class="btn" type="submit">&#10004; Save & Publish Vehicle</button>
+    <a class="btn sec" href="/inventory">Cancel</a>
+  </div>
+</form>
 {% endblock %}

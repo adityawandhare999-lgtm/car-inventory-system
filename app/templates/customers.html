@@ -1,5 +1,47 @@
-{% extends "base.html" %}{% block content %}
-<h1>Customers</h1><div class="sub">{{ rows|length }} registered customers</div>
-<div class="card" style="padding:6px 8px"><table><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>City</th><th>Registered</th><th class="num">Purchases</th></tr>
-{% for r in rows %}<tr><td>{{ r.customer_id }}</td><td><b>{{ r.full_name }}</b></td><td>{{ r.phone }}</td><td>{{ r.email }}</td><td>{{ r.city }}</td><td>{{ r.registered_on }}</td><td class="num">{{ r.purchases }}</td></tr>{% endfor %}</table></div>
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Customer Directory</h1>
+    <div class="sub">Registered clientele and their lifetime purchase history</div>
+  </div>
+  <span class="count">{{ rows|length }} total customers</span>
+</div>
+
+<div class="card" style="padding: 10px;">
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Full Name</th>
+          <th>Contact Phone</th>
+          <th>Email Address</th>
+          <th>City / State</th>
+          <th>Registered Date</th>
+          <th class="num">Cars Purchased</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td><span style="color:var(--text-muted); font-size:12px;">#{{ r.customer_id }}</span></td>
+          <td><strong>{{ r.full_name }}</strong></td>
+          <td>{{ r.phone }}</td>
+          <td><a href="mailto:{{ r.email }}" style="color:var(--primary); text-decoration:none;">{{ r.email }}</a></td>
+          <td>{{ r.city }}</td>
+          <td>{{ r.registered_on }}</td>
+          <td class="num">
+            {% if r.purchases > 0 %}
+              <span class="badge b-Sold">{{ r.purchases }} vehicle{{ 's' if r.purchases > 1 }}</span>
+            {% else %}
+              <span style="color:var(--text-muted); font-size:12.5px;">None</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}
