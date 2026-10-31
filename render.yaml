@@ -2,8 +2,6 @@ version: "1"
 
 databases:
   - name: car-inventory-db
-    databaseName: adityawandhare
-    user: postgres
     plan: free
 
 services:
