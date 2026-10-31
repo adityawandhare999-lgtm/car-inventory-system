@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: car-inventory-app
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python init_db.py"
+    startCommand: "gunicorn run:app"
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: car-inventory-db
+          property: connectionString
+      - key: FLASK_DEBUG
+        value: "false"
+
+databases:
+  - name: car-inventory-db
+    databaseName: adityawandhare
+    user: postgres
+    plan: free
